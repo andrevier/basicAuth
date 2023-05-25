@@ -1,13 +1,15 @@
 ## Hello World with Spring Security
 
-This is an example of a minimal implementation of security using the Spring Security framework.
+This repository provides an example of a minimal implementation of security using the Spring Security framework.
 
-The application has the following dependencies, which can be built with either Maven or Gradle:
+### Dependencies
+
+To build the application, you need the following dependencies, which can be managed with both Maven and Gradle:
 
 - Spring Web
 - Spring Security
 
-The Maven dependencies are listed below:
+For Maven, add the following dependencies to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -20,9 +22,11 @@ The Maven dependencies are listed below:
 </dependency>
 ```
 
-In this project, we use basic authentication, which transfers credentials as username:password pairs encoded in Base64. This method is not secure for protecting requests but is used here to simplify the example.
+### Project Structure
 
-After creating the project, we add a controller with an endpoint that the client can access to return a simple message such as "Hello, world!".
+In this project, we use basic authentication, which transfers credentials as username:password pairs encoded in Base64. Please note that this is not a secure way to protect requests, but it is used here for simplicity and illustrative purposes.
+
+After creating the project, we add a controller with an endpoint that the client can access, returning a simple message such as "Hello, world!".
 
 ```java
 // Controller.java
@@ -35,22 +39,31 @@ public class Controller {
 }
 ```
 
-By default, Spring Boot points to the location "http://localhost:8080" if no configuration is specified. You can access it using the cURL command:
+### Accessing the Endpoint
 
-```powershell
-curl http://localhost:8080
+By default, the Spring Boot application runs on `http://localhost:8080` if no specific configuration is provided. You can access the endpoint using the cURL command:
+
+```bash
+curl http://localhost:8080/hello
 ```
 
 The response will be "Hello there!".
 
-The security layer is implemented using two classes: UserDetailsService and PasswordEncoder. The UserDetailsService retrieves the user details, which is an object of a class implementing the UserDetails interface, and stores the user information. The PasswordEncoder bean is responsible for hashing the password before comparing it to the stored value. In this example, they are implemented as beans in the class annotated with @Configuration.
+### Security Configuration
+
+The security layer is implemented using two classes: `UserDetailsService` and `PasswordEncoder`. 
+
+- `UserDetailsService` retrieves the user details and stores the information of the user. It expects an object of a class that implements the `UserDetails` interface.
+- `PasswordEncoder` is responsible for hashing the password before comparing it to the stored value.
+
+In this example, these classes are implemented as beans in the `ProjectConfig` class, which is annotated with `@Configuration`.
 
 ```java
 // ProjectConfig.java
 @Configuration
 public class ProjectConfig {
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() {    
         UserDetails user = User.withUsername("john")
             .password("12345")
             .build();
@@ -65,8 +78,16 @@ public class ProjectConfig {
 }
 ```
 
-After that, the endpoint is secured and can be accessed using cURL:
+### Securing the Endpoint
 
+After configuring the security layer, the endpoint becomes secured. To access it, you need to provide the correct credentials using cURL:
+
+```bash
+curl.exe -u "john:12345" "http://localhost:8080/hello"
 ```
-curl.exe -u "john:12345" "http://localhost:8080"
-```
+
+That's it! You can now explore this example of Spring Security in action. Feel free to customize and build upon it according to your needs.
+
+### References
+[1] [Securing a web app](https://spring.io/guides/gs/securing-web/)
+[2] [Spring Security in action](https://www.manning.com/books/spring-security-in-action)
